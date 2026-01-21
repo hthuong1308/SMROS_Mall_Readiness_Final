@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopee Mall Readiness Scoring System (SMRSS)</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #F9FAFB;
+      color: #111827;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    .header {
+      background: #FFFFFF;
+      border-bottom: 2px solid #E5E7EB;
+      padding: 20px 0;
+    }
+
+    .header-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .system-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: #EE4D2D;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .system-name {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .system-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .system-acronym {
+      font-size: 12px;
+      color: #6B7280;
+      font-weight: 500;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    .hero-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-content {
+      max-width: 580px;
+    }
+
+    .target-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: #FEF3F2;
+      border: 1px solid #FEE2E2;
+      color: #EE4D2D;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-title {
+      font-size: 36px;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero-title .highlight {
+      color: #EE4D2D;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: #4B5563;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .hero-note {
+      font-size: 13px;
+      color: #6B7280;
+      margin-top: -16px;
+      margin-bottom: 22px;
+    }
+
+    .hero-note strong {
+      color: #374151;
+    }
+
+    .hero-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+      padding: 20px;
+      background: #F9FAFB;
+      border-radius: 8px;
+      border: 1px solid #E5E7EB;
+    }
+
+    .hero-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .feature-check {
+      width: 20px;
+      height: 20px;
+      background: #10B981;
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 14px 28px;
+      background: #EE4D2D;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(238, 77, 45, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: #D73211;
+      box-shadow: 0 4px 8px rgba(238, 77, 45, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      padding: 14px 28px;
+      background: transparent;
+      color: #EE4D2D;
+      border: 2px solid #EE4D2D;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: #FEF3F2;
+    }
+
+    /* Scoring Preview Panel */
+    .scoring-preview {
+      background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .preview-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .preview-label {
+      font-size: 12px;
+      color: #6B7280;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .score-display {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .score-value {
+      font-size: 56px;
+      font-weight: 700;
+      color: #EE4D2D;
+      line-height: 1;
+    }
+
+    .score-max {
+      font-size: 24px;
+      color: #9CA3AF;
+      font-weight: 600;
+    }
+
+    .score-status {
+      display: inline-block;
+      padding: 6px 16px;
+      background: #FEF3F2;
+      border: 1px solid #FEE2E2;
+      color: #EE4D2D;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .gate-status {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #E5E7EB;
+    }
+
+    .gate-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      gap: 16px;
+    }
+
+    .gate-label {
+      font-size: 14px;
+      color: #374151;
+      font-weight: 500;
+    }
+
+    .gate-badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .gate-badge.pass {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+
+    .gate-badge.pending {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .gate-badge.fail {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .kpi-groups {
+      margin-top: 20px;
+    }
+
+    .kpi-group {
+      margin-bottom: 14px;
+    }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .kpi-name {
+      font-size: 13px;
+      color: #4B5563;
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-size: 13px;
+      color: #6B7280;
+      font-weight: 700;
+    }
+
+    .kpi-bar {
+      height: 8px;
+      background: #E5E7EB;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .kpi-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .demo-pill {
+      margin-top: 14px;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #EEF2FF;
+      border: 1px solid #E0E7FF;
+      color: #3730A3;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .demo-pill span {
+      font-weight: 600;
+      color: #4B5563;
+    }
+
+    /* Value Proposition */
+    .value-section {
+      padding: 60px 40px;
+    }
+
+    .value-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      color: #6B7280;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .value-card {
+      background: #FFFFFF;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 28px 24px;
+      transition: all 0.2s;
+    }
+
+    .value-card:hover {
+      border-color: #EE4D2D;
+      box-shadow: 0 4px 12px rgba(238, 77, 45, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .value-icon {
+      width: 48px;
+      height: 48px;
+      background: #FEF3F2;
+      border: 1px solid #FEE2E2;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+
+    .value-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .value-desc {
+      font-size: 13px;
+      color: #6B7280;
+      line-height: 1.5;
+    }
+
+    /* Process Section */
+    .process-section {
+      background: #FFFFFF;
+      padding: 60px 40px;
+      border-top: 1px solid #E5E7EB;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    .process-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .process-card {
+      background: #F9FAFB;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 28px 24px;
+      position: relative;
+    }
+
+    .process-number {
+      position: absolute;
+      top: -16px;
+      left: 24px;
+      width: 32px;
+      height: 32px;
+      background: #EE4D2D;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .process-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 12px;
+      margin-top: 8px;
+    }
+
+    .process-desc {
+      font-size: 13px;
+      color: #6B7280;
+      line-height: 1.6;
+    }
+
+    .process-bullets {
+      list-style: none;
+      margin-top: 12px;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .process-bullets li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    /* Reuse bullet icon system */
+    .bullet-icon {
+      min-width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    /* Color variants */
+    .bullet-icon.red {
+      background: #EF4444;
+    }
+
+    .bullet-icon.orange {
+      background: #F59E0B;
+    }
+
+    .bullet-icon.green {
+      background: #10B981;
+    }
+
+    .bullet-icon.blue {
+      background: #3B82F6;
+    }
+
+    .bullet-icon.purple {
+      background: #6366F1;
+    }
+
+    /* Outcome Section */
+    .outcome-section {
+      padding: 60px 40px;
+      background: #F9FAFB;
+    }
+
+    .outcome-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .outcome-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: stretch;
+    }
+
+    .outcome-list {
+      background: #FFFFFF;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 32px;
+      height: 100%;
+    }
+
+    .outcome-list h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 20px;
+    }
+
+    .outcome-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .outcome-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      background: #F9FAFB;
+      border-radius: 8px;
+      border: 1px solid #E5E7EB;
+    }
+
+    .outcome-icon {
+      width: 24px;
+      height: 24px;
+      background: #EE4D2D;
+      border-radius: 6px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .outcome-text {
+      flex: 1;
+    }
+
+    .outcome-text strong {
+      display: block;
+      font-size: 14px;
+      color: #111827;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .outcome-text span {
+      font-size: 13px;
+      color: #6B7280;
+    }
+
+    .sample-result {
+      background: #FFFFFF;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 32px;
+      height: 100%;
+    }
+
+    .sample-header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #E5E7EB;
+      margin-bottom: 20px;
+    }
+
+    .sample-header h4 {
+      font-size: 14px;
+      color: #6B7280;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .sample-score {
+      font-size: 40px;
+      font-weight: 800;
+      color: #EE4D2D;
+    }
+
+    .sample-status {
+      display: inline-block;
+      padding: 6px 16px;
+      background: #FEF3F2;
+      border: 1px solid #FEE2E2;
+      color: #EE4D2D;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .fixlist-preview {
+      margin-top: 20px;
+    }
+
+    .fixlist-preview h5 {
+      font-size: 13px;
+      color: #6B7280;
+      font-weight: 800;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .fixlist-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: #FEF3F2;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #374151;
+    }
+
+    .priority-badge {
+      padding: 3px 8px;
+      background: #EE4D2D;
+      color: white;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .value-bullets {
+      list-style: none;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-left: 0;
+    }
+
+    .value-bullets li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    /* Bullet icons */
+    .bullet-icon {
+      min-width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    /* Color variants */
+    .bullet-icon.red {
+      background: #EF4444;
+    }
+
+    .bullet-icon.orange {
+      background: #F59E0B;
+    }
+
+    .bullet-icon.green {
+      background: #10B981;
+    }
+
+    .bullet-icon.p0 {
+      background: #DC2626;
+    }
+
+    .bullet-icon.p1 {
+      background: #F97316;
+    }
+
+    .bullet-icon.p2 {
+      background: #6B7280;
+    }
+
+    /* Optional: icon background by card type */
+    .icon-must {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+
+    .icon-fix {
+      background: #FEF3C7;
+    }
+
+    .icon-score {
+      background: #D1FAE5;
+    }
+
+    .icon-fixlist {
+      background: #E0E7FF;
+    }
+
+    /* Footer */
+    .footer {
+      background: #111827;
+      color: #D1D5DB;
+      padding: 40px 0 32px;
+      border-top: 1px solid #1F2937;
+    }
+
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 0 40px;
+    }
+
+    .footer-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+
+    .footer-subtitle {
+      font-size: 13px;
+      color: #9CA3AF;
+      margin-bottom: 4px;
+    }
+
+    .footer-meta {
+      font-size: 12px;
+      color: #6B7280;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #374151;
+    }
+
+    @media (max-width: 1024px) {
+
+      .hero-container,
+      .outcome-content {
+        grid-template-columns: 1fr;
+      }
+
+      .value-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .process-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+
+      .value-grid,
+      .process-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-group {
+        flex-direction: column;
+      }
+
+      .hero-title {
+        font-size: 28px;
+      }
+
+      .header-container,
+      .hero-container,
+      .value-section,
+      .process-section,
+      .outcome-section,
+      .footer-container {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="system-logo">
+        <div class="logo-icon">SM</div>
+        <div class="system-name">
+          <div class="system-title">Shopee Mall Readiness Scoring System</div>
+          <div class="system-acronym">SMRSS – KPI-Based Assessment Framework</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="target-badge">DÀNH CHO NGƯỜI BÁN SHOPEE CHUẨN BỊ ĐĂNG KÝ SHOPEE MALL</div>
+
+        <h1 class="hero-title">
+          Đánh giá mức độ sẵn sàng đạt chuẩn <span class="highlight">Shopee Mall</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Đánh giá theo <strong>điều kiện bắt buộc của sàn</strong> + mô hình chấm điểm MRSM (Mall Readiness Scoring
+          Model)
+        </p>
+        <div class="hero-note">
+          <strong>Lưu ý:</strong> bản demo hiển thị kết quả minh hoạ (chưa cần dữ liệu KPI thực tế).
+        </div>
+
+        <div class="hero-features">
+          <div class="hero-feature">
+            <div class="feature-check">✓</div>
+            <span><strong>Kiểm tra điều kiện bắt buộc</strong> – phát hiện tiêu chí “phải đạt” trước khi nộp hồ
+              sơ</span>
+          </div>
+          <div class="hero-feature">
+            <div class="feature-check">✓</div>
+            <span><strong>Chấm điểm theo 4 nhóm</strong> – Vận hành / Thương hiệu / Danh mục / Quy mô</span>
+          </div>
+          <div class="hero-feature">
+            <div class="feature-check">✓</div>
+            <span><strong>Gợi ý Fixlist ưu tiên</strong> – danh sách hành động theo mức tác động & mức độ khả thi</span>
+          </div>
+        </div>
+
+        <div class="cta-group">
+          <button class="btn-primary" onclick="startAssessment()">
+            <span>Bắt đầu đánh giá</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <button class="btn-secondary" onclick="goCriteria()">Xem tiêu chí đánh giá</button>
+        </div>
+      </div>
+
+      <!-- Scoring Preview Panel -->
+      <div class="scoring-preview">
+        <div class="preview-header">
+          <div class="preview-label">Readiness Score (Demo)</div>
+          <div class="score-display">
+            <span class="score-value">78</span>
+            <span class="score-max">/100</span>
+          </div>
+          <div class="score-status">Gần đạt chuẩn (Near Mall-Ready)</div>
+
+          <div class="demo-pill">
+            DEMO <span>— kết quả minh hoạ</span>
+          </div>
+        </div>
+
+        <div class="gate-status">
+          <div class="gate-row">
+            <span class="gate-label">Điều kiện bắt buộc của sàn</span>
+            <span class="gate-badge pass">ĐẠT</span>
+          </div>
+
+        </div>
+
+        <div class="kpi-groups">
+          <div class="kpi-group">
+            <div class="kpi-header">
+              <span class="kpi-name">Vận hành (Operation)</span>
+              <span class="kpi-value">85%</span>
+            </div>
+            <div class="kpi-bar">
+              <div class="kpi-fill" style="width: 85%"></div>
+            </div>
+          </div>
+
+          <div class="kpi-group">
+            <div class="kpi-header">
+              <span class="kpi-name">Thương hiệu (Brand)</span>
+              <span class="kpi-value">72%</span>
+            </div>
+            <div class="kpi-bar">
+              <div class="kpi-fill" style="width: 72%"></div>
+            </div>
+          </div>
+
+          <div class="kpi-group">
+            <div class="kpi-header">
+              <span class="kpi-name">Danh mục SP (Category)</span>
+              <span class="kpi-value">90%</span>
+            </div>
+            <div class="kpi-bar">
+              <div class="kpi-fill" style="width: 90%"></div>
+            </div>
+          </div>
+
+          <div class="kpi-group" style="margin-bottom:0;">
+            <div class="kpi-header">
+              <span class="kpi-name">Quy mô TMĐT (Scale)</span>
+              <span class="kpi-value">60%</span>
+            </div>
+            <div class="kpi-bar">
+              <div class="kpi-fill" style="width: 60%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value Proposition -->
+  <section class="value-section" id="criteria">
+    <div class="value-container">
+      <div class="section-header">
+        <h2 class="section-title">Cách hệ thống đánh giá</h2>
+        <p class="section-subtitle">Ưu tiên “điều kiện bắt buộc” trước, sau đó mới tính điểm theo trọng số</p>
+      </div>
+
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="value-icon icon-must">✓</div>
+          <h3 class="value-title">Điều kiện bắt buộc của sàn</h3>
+
+          <ul class="value-bullets">
+            <li>
+              <span class="bullet-icon red">!</span>
+              Phải đạt đầy đủ trước khi xét duyệt Mall
+            </li>
+            <li>
+              <span class="bullet-icon red">!</span>
+              Thiếu hồ sơ thương hiệu / pháp lý → Chưa sẵn sàng
+            </li>
+            <li>
+              <span class="bullet-icon red">!</span>
+              KPI tốt vẫn không được tính nếu chưa đạt
+            </li>
+          </ul>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon icon-fix">🛠️</div>
+          <h3 class="value-title">Điều kiện cần khắc phục</h3>
+
+          <ul class="value-bullets">
+            <li>
+              <span class="bullet-icon orange">⏳</span>
+              Cho phép thời hạn cải thiện (ví dụ 7 ngày)
+            </li>
+            <li>
+              <span class="bullet-icon orange">⏳</span>
+              Chưa khắc phục xong → tạm dừng đánh giá điểm
+            </li>
+          </ul>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon icon-score">🎯</div>
+          <h3 class="value-title">Chấm điểm theo 4 nhóm</h3>
+
+          <ul class="value-bullets">
+            <li>
+              <span class="bullet-icon green">●</span>
+              Vận hành (Operation)
+            </li>
+            <li>
+              <span class="bullet-icon green">●</span>
+              Thương hiệu (Brand)
+            </li>
+            <li>
+              <span class="bullet-icon green">●</span>
+              Danh mục & Quy mô TMĐT
+            </li>
+          </ul>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon icon-fixlist">📋</div>
+          <h3 class="value-title">Fixlist ưu tiên cải thiện</h3>
+
+          <ul class="value-bullets">
+            <li>
+              <span class="bullet-icon p0">P0</span>
+              Ảnh hưởng trực tiếp đến khả năng được duyệt
+            </li>
+            <li>
+              <span class="bullet-icon p1">P1</span>
+              Cải thiện điểm số & độ ổn định vận hành
+            </li>
+            <li>
+              <span class="bullet-icon p2">P2</span>
+              Tối ưu trải nghiệm & hình ảnh gian hàng
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="process-section">
+    <div class="process-container">
+      <div class="section-header">
+        <h2 class="section-title">Quy trình đánh giá 4 bước</h2>
+        <p class="section-subtitle">
+          Luồng đánh giá chuẩn theo trình tự xét duyệt Shopee Mall
+        </p>
+      </div>
+
+      <div class="process-grid">
+        <!-- Step 1 -->
+        <div class="process-card">
+          <div class="process-number">1</div>
+          <h3 class="process-title">Nhập dữ liệu đánh giá</h3>
+
+          <ul class="process-bullets">
+            <li>
+              <span class="bullet-icon blue">📥</span>
+              Nhập dữ liệu KPI vận hành, thương hiệu, danh mục & quy mô
+            </li>
+            <li>
+              <span class="bullet-icon blue">📄</span>
+              Cung cấp hồ sơ, minh chứng theo yêu cầu của sàn
+            </li>
+          </ul>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="process-card">
+          <div class="process-number">2</div>
+          <h3 class="process-title">Xét duyệt theo trình tự</h3>
+
+          <ul class="process-bullets">
+            <li>
+              <span class="bullet-icon red">①</span>
+              Kiểm tra điều kiện bắt buộc của sàn
+            </li>
+            <li>
+              <span class="bullet-icon orange">②</span>
+              Xét điều kiện cần khắc phục (nếu có)
+            </li>
+            <li>
+              <span class="bullet-icon green">③</span>
+              Chỉ tính KPI khi vượt qua các điều kiện trên
+            </li>
+          </ul>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="process-card">
+          <div class="process-number">3</div>
+          <h3 class="process-title">Tổng hợp điểm & phân tầng</h3>
+
+          <ul class="process-bullets">
+            <li>
+              <span class="bullet-icon green">⚖️</span>
+              Tính điểm theo trọng số 4 nhóm tiêu chí
+            </li>
+            <li>
+              <span class="bullet-icon green">🏷️</span>
+              Phân tầng: Not Ready / Partially / Near / Mall-Ready
+            </li>
+          </ul>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="process-card">
+          <div class="process-number">4</div>
+          <h3 class="process-title">Xuất báo cáo & Fixlist</h3>
+
+          <ul class="process-bullets">
+            <li>
+              <span class="bullet-icon purple">📊</span>
+              Báo cáo chi tiết điểm số & trạng thái sẵn sàng
+            </li>
+            <li>
+              <span class="bullet-icon purple">🛠️</span>
+              Fixlist ưu tiên P0–P2 theo mức ảnh hưởng & khả thi
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Outcome Section -->
+  <section class="outcome-section">
+    <div class="outcome-container">
+      <div class="section-header">
+        <h2 class="section-title">Kết quả người bán nhận được</h2>
+        <p class="section-subtitle">Báo cáo rõ ràng, dễ hiểu — không dùng thuật ngữ kỹ thuật gây khó</p>
+      </div>
+
+      <div class="outcome-content">
+        <div class="outcome-list">
+          <h3>Thông tin kết quả chi tiết</h3>
+
+          <div class="outcome-items">
+            <div class="outcome-item">
+              <div class="outcome-icon">1</div>
+              <div class="outcome-text">
+                <strong>Trạng thái sẵn sàng</strong>
+                <span>Mall-Ready / Gần đạt chuẩn / Chưa sẵn sàng (tách rõ: điều kiện bắt buộc & điểm số)</span>
+              </div>
+            </div>
+
+            <div class="outcome-item">
+              <div class="outcome-icon">2</div>
+              <div class="outcome-text">
+                <strong>Điều kiện bắt buộc & điều kiện cần khắc phục</strong>
+                <span>Hiển thị tiêu chí đang thiếu và thời hạn khắc phục (nếu có)</span>
+              </div>
+            </div>
+
+            <div class="outcome-item">
+              <div class="outcome-icon">3</div>
+              <div class="outcome-text">
+                <strong>Điểm theo 4 nhóm tiêu chí</strong>
+                <span>Vận hành / Thương hiệu / Danh mục SP / Quy mô TMĐT</span>
+              </div>
+            </div>
+
+            <div class="outcome-item">
+              <div class="outcome-icon">4</div>
+              <div class="outcome-text">
+                <strong>Danh sách ưu tiên cải thiện</strong>
+                <span>Fixlist được xếp hạng P0–P2 theo mức ảnh hưởng và mức độ khả thi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sample-result">
+          <div class="sample-header">
+            <h4>Kết quả minh hoạ</h4>
+            <div class="sample-score">78/100</div>
+            <div class="sample-status">Gần đạt chuẩn</div>
+          </div>
+
+          <div class="fixlist-preview">
+            <h5>Ưu tiên cần làm</h5>
+
+            <div class="fixlist-item">
+              <span class="priority-badge">P0</span>
+              <span>Hoàn thiện hồ sơ thương hiệu / giấy tờ bắt buộc</span>
+            </div>
+
+            <div class="fixlist-item">
+              <span class="priority-badge">P1</span>
+              <span>Cải thiện tỷ lệ phản hồi chat trong 7 ngày</span>
+            </div>
+
+            <div class="fixlist-item">
+              <span class="priority-badge">P2</span>
+              <span>Chuẩn hoá nội dung sản phẩm & hình ảnh</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-title">SMRSS – Shopee Mall Readiness Scoring System</div>
+      <div class="footer-subtitle">Khung đánh giá & gợi ý cải thiện mức độ sẵn sàng đạt chuẩn Shopee Mall</div>
+      <div class="footer-meta">© 2026 – Phạm Huyền Thương - K224111503| Thesis Prototype</div>
+    </div>
+  </footer>
+
+  <script>
+    // Deploy-safe navigation (relative paths)
+    function startAssessment() {
+      window.location.href = "./KO_GATE.html";
+    }
+
+    function goCriteria() {
+      window.location.href = "./Criteria.html";
+    }
+  </script>
+</body>
+
+</html>

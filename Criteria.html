@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopee Mall Readiness – Tiêu chí & Cách đánh giá</title>
+    <style>
+        /* ========== DESIGN TOKENS ========== */
+        :root {
+            --brand: #EE4D2D;
+            --brand-2: #F97316;
+            --ink: #0F172A;
+            --muted: #64748B;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --line: #E2E8F0;
+            --success: #16A34A;
+            --warning: #F59E0B;
+            --danger: #DC2626;
+            --info: #2563EB;
+            --ko: #B91C1C;
+            --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.6;
+        }
+
+        /* ========== HEADER ========== */
+        .header {
+            background: var(--card);
+            border-bottom: 2px solid var(--line);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--brand);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .logo-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .logo-text p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--brand);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #D73211;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--brand);
+            border: 2px solid var(--brand);
+        }
+
+        .btn-outline:hover {
+            background: #FEF3F2;
+        }
+
+        .btn-home {
+            background: var(--card);
+            color: var(--ink);
+            border: 2px solid var(--line);
+        }
+
+        .btn-home:hover {
+            border-color: var(--brand);
+            color: var(--brand);
+            transform: translateY(-1px);
+        }
+
+        /* ========== MAIN LAYOUT ========== */
+        .main-layout {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* ========== SIDEBAR NAV ========== */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-list a {
+            display: block;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-list a:hover,
+        .nav-list a.active {
+            background: #FEF3F2;
+            color: var(--brand);
+        }
+
+        /* ========== CONTENT ========== */
+        .content {
+            min-width: 0;
+        }
+
+        .search-box {
+            background: var(--card);
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            color: var(--ink);
+        }
+
+        .search-icon {
+            color: var(--muted);
+            font-size: 20px;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .section-header p {
+            font-size: 15px;
+            color: var(--muted);
+        }
+
+        .info-box {
+            background: #EEF2FF;
+            border-left: 4px solid var(--info);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #1E3A8A;
+        }
+
+        .info-box strong {
+            color: var(--info);
+        }
+
+        /* ========== KO GATE CARDS ========== */
+        .ko-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .ko-card {
+            background: var(--card);
+            border: 2px solid var(--line);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+        }
+
+        .ko-card:hover {
+            border-color: var(--ko);
+        }
+
+        .ko-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #FEE2E2;
+            color: var(--ko);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .ko-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 12px;
+        }
+
+        .ko-card p {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        .ko-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+            margin: 16px 0 8px;
+        }
+
+        .ko-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .ko-card ul li {
+            padding: 6px 0 6px 24px;
+            position: relative;
+            font-size: 14px;
+            color: var(--ink);
+        }
+
+        .ko-card ul li:before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: var(--ko);
+            font-weight: 700;
+        }
+
+        .consequence {
+            background: #FEF3F2;
+            border-left: 3px solid var(--danger);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--ko);
+            font-weight: 600;
+        }
+
+        /* ========== SCORING MODEL ========== */
+        .scoring-group {
+            background: var(--card);
+            border: 2px solid var(--line);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .group-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .weight-badge {
+            padding: 6px 14px;
+            background: var(--brand);
+            color: #fff;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--line);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--brand);
+            border-radius: 6px;
+        }
+
+        .kpi-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .kpi-table th {
+            text-align: left;
+            padding: 12px;
+            background: var(--bg);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--line);
+            font-size: 14px;
+            color: var(--ink);
+        }
+
+        .kpi-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tooltip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: var(--info);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: help;
+            margin-left: 6px;
+        }
+
+        /* ========== FORMULA & TIER ========== */
+        .formula-box {
+            background: var(--card);
+            border: 2px solid var(--line);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .formula-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 12px;
+        }
+
+        .formula {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: var(--ink);
+            margin: 12px 0;
+            border-left: 4px solid var(--brand);
+        }
+
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .tier-card {
+            background: var(--card);
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tier-card.danger {
+            border-color: var(--danger);
+        }
+
+        .tier-card.warning {
+            border-color: var(--warning);
+        }
+
+        .tier-card.info {
+            border-color: var(--info);
+        }
+
+        .tier-card.success {
+            border-color: var(--success);
+        }
+
+        .tier-range {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .tier-card.danger .tier-range {
+            color: var(--danger);
+        }
+
+        .tier-card.warning .tier-range {
+            color: var(--warning);
+        }
+
+        .tier-card.info .tier-range {
+            color: var(--info);
+        }
+
+        .tier-card.success .tier-range {
+            color: var(--success);
+        }
+
+        .tier-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        /* ========== BACK TO TOP ========== */
+        .back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 48px;
+            height: 48px;
+            background: var(--brand);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .back-to-top:hover {
+            background: #D73211;
+            transform: translateY(-4px);
+        }
+
+
+        /* ========== UTILITIES ========== */
+        .is-hidden {
+            display: none !important;
+        }
+
+        .nav-list a:focus-visible,
+        .btn:focus-visible,
+        .search-box input:focus-visible {
+            outline: 3px solid rgba(238, 77, 45, 0.35);
+            outline-offset: 2px;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                padding: 16px;
+            }
+
+            .nav-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .ko-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tier-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .main-layout {
+                padding: 20px;
+            }
+
+            .header-container {
+                padding: 0 20px;
+            }
+
+            .tier-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon">SM</div>
+                <div class="logo-text">
+                    <h1>Shopee Mall Readiness</h1>
+                    <p>Tiêu chí & Cách đánh giá</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-home" onclick="goHome()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12L12 19M5 12L12 5" />
+                    </svg>
+                    Trang chủ
+                </button>
+                <button class="btn btn-primary" onclick="scrollToSection('ko-gate')">Xem KO Gate</button>
+                <button class="btn btn-outline" onclick="scrollToSection('scoring')">Xem Scoring Model</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN LAYOUT -->
+    <div class="main-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h3>Nội dung</h3>
+            <ul class="nav-list">
+                <li><a href="#ko-gate" class="active">KO Gate</a></li>
+                <li><a href="#scoring">Scoring Model</a></li>
+                <li><a href="#formula">Cách tính điểm</a></li>
+                <li><a href="#tiers">Phân tầng</a></li>
+            </ul>
+        </aside>
+
+        <!-- CONTENT -->
+        <main class="content">
+
+            <!-- SEARCH BOX -->
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm tiêu chí KO hoặc KPI..." />
+            </div>
+
+            <!-- KO GATE SECTION -->
+            <section class="section" id="ko-gate">
+                <div class="section-header">
+                    <h2>KO Gate (Điều kiện bắt buộc)</h2>
+                    <p>Các tiêu chí phải đạt 100% trước khi xét duyệt Mall. Thiếu 1 tiêu chí → MRSM_Final = 0 (Not
+                        Ready)</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>Tại sao quan trọng?</strong> KO Gate đảm bảo shop có đủ pháp lý, uy tín và không vi phạm
+                    chính sách. Nếu fail bất kỳ tiêu chí nào, hệ thống sẽ không tính điểm scoring layer, dù KPI có tốt
+                    đến đâu.
+                </div>
+
+                <div class="ko-grid" id="koGrid"></div>
+            </section>
+
+            <!-- SCORING MODEL SECTION -->
+            <section class="section" id="scoring">
+                <div class="section-header">
+                    <h2>Scoring Model (MRSM)</h2>
+                    <p>Chấm điểm theo 4 nhóm tiêu chí với trọng số: Vận hành 50% • Thương hiệu 20% • Danh mục 15% • Quy
+                        mô 15%</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>Dùng để làm gì?</strong> Mô hình MCDM (Multi-Criteria Decision Making) giúp đánh giá toàn
+                    diện khả năng vận hành, thương hiệu, chất lượng sản phẩm và quy mô kinh doanh của shop.
+                </div>
+
+                <div id="scoringGroups"></div>
+            </section>
+
+            <!-- FORMULA SECTION -->
+            <section class="section" id="formula">
+                <div class="formula-box">
+                    <h3>Cách tính điểm MRSM</h3>
+                    <div class="formula">
+                        Nếu KO fail: MRSM_Final = 0<br />
+                        Nếu KO pass: MRSM_Final = Σ(Score_i × Weight_Final_i)
+                    </div>
+                    <p style="margin-top:12px; font-size:14px; color:var(--muted);">
+                        <strong>Ví dụ:</strong> Shop có LSR = 95% (9.5 điểm), NFR = 2% (8 điểm), website VNNIC hợp lệ (8
+                        điểm)...
+                        → MRSM_Final = 9.5×10% + 8×10% + 8×8% + ... = tổng điểm cuối.
+                    </p>
+                </div>
+            </section>
+
+            <!-- TIER SECTION -->
+            <section class="section" id="tiers">
+                <div class="formula-box">
+                    <h3>Phân tầng kết quả</h3>
+                    <div class="tier-grid">
+                        <div class="tier-card danger">
+                            <div class="tier-range">0–49</div>
+                            <div class="tier-label">Not Ready</div>
+                        </div>
+                        <div class="tier-card warning">
+                            <div class="tier-range">50–69</div>
+                            <div class="tier-label">Partially Ready</div>
+                        </div>
+                        <div class="tier-card info">
+                            <div class="tier-range">70–84</div>
+                            <div class="tier-label">Near Mall-Ready</div>
+                        </div>
+                        <div class="tier-card success">
+                            <div class="tier-range">≥85</div>
+                            <div class="tier-label">Mall-Ready</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- BACK TO TOP -->
+    <div class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        ↑
+    </div>
+
+    <script src="Criteria.js" defer></script>
+</body>
+
+</html>

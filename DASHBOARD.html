@@ -1,0 +1,2100 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard – Shopee Mall Readiness</title>
+</head>
+<style>
+    :root {
+        --cam: #ee4d2d;
+        --cam-nhat: #ffefe9;
+        --nen: #f6f7fb;
+        --trang: #ffffff;
+        --chu: #111827;
+        --chu-phu: #6b7280;
+        --duong-ke: #e5e7eb;
+
+        --tot: #16a34a;
+        --tot-nen: #ecfdf3;
+
+        --canh-bao: #f59e0b;
+        --canh-bao-nen: #fff7ed;
+
+        --nguy-hiem: #dc2626;
+        --nguy-hiem-nen: #fff1f2;
+
+        --xanh: #2563eb;
+        --xanh-nen: #eff6ff;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box
+    }
+
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: var(--nen);
+        color: var(--chu);
+        line-height: 1.5;
+    }
+
+    svg text {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif
+    }
+
+    /* ===== Force font + smoothing đồng nhất toàn trang ===== */
+    html,
+    body,
+    button,
+    input,
+    select,
+    textarea {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: geometricPrecision;
+    }
+
+    /* ===== Force font-weight và letter rendering cho nút ===== */
+    .btn-header,
+    .btn-header * {
+        font-family: inherit !important;
+        font-weight: 800 !important;
+        letter-spacing: .01em;
+    }
+
+    /* Nếu trong nút có b/strong -> ép lại */
+    .btn-header b,
+    .btn-header strong {
+        font-weight: 800 !important;
+    }
+
+
+    /* ========================
+   HEADER
+   ======================== */
+    .dashboard-header {
+        background: var(--trang);
+        border-bottom: 2px solid var(--duong-ke);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .header-container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 20px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 16px
+    }
+
+    .logo {
+        background: var(--cam);
+        color: var(--trang);
+        font-weight: 800;
+        font-size: 16px;
+        padding: 8px 14px;
+        border-radius: 10px;
+    }
+
+    .header-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--chu)
+    }
+
+    .header-right {
+        display: flex;
+        gap: 12px
+    }
+
+    .btn-header {
+        padding: 10px 20px;
+        border: 1px solid var(--duong-ke);
+        border-radius: 10px;
+        background: var(--trang);
+        color: var(--chu);
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all .2s;
+    }
+
+    .btn-header:hover {
+        border-color: var(--cam);
+        box-shadow: 0 2px 10px rgba(238, 77, 45, .15);
+        transform: translateY(-1px);
+    }
+
+    .btn-header.btn-primary {
+        background: var(--cam);
+        color: var(--trang);
+        border-color: var(--cam);
+    }
+
+    .btn-header.btn-primary:hover {
+        background: #d73211;
+        border-color: #d73211;
+    }
+
+    /* Progress */
+    .progress-bar-container {
+        padding: 16px 32px;
+        border-top: 1px solid var(--duong-ke);
+    }
+
+    .progress-bar {
+        max-width: 600px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .progress-step {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--chu-phu);
+        font-weight: 800;
+    }
+
+    .step-dot {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--duong-ke);
+        color: var(--chu-phu);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 14px;
+    }
+
+    .progress-step.completed .step-dot {
+        background: var(--tot);
+        color: var(--trang)
+    }
+
+    .progress-step.active .step-dot {
+        background: var(--cam);
+        color: var(--trang)
+    }
+
+    .progress-step.completed,
+    .progress-step.active {
+        color: var(--chu)
+    }
+
+    .progress-line {
+        width: 80px;
+        height: 2px;
+        background: var(--duong-ke)
+    }
+
+    .progress-line.completed,
+    .progress-line.active {
+        background: var(--cam)
+    }
+
+    /* ========================
+   LAYOUT
+   ======================== */
+    .dashboard-container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 32px;
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 32px;
+        align-items: start;
+    }
+
+    /* ========================
+   SIDEBAR
+   ======================== */
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: sticky;
+        top: 180px;
+    }
+
+    /* ========================
+   CARD
+   ======================== */
+    .card {
+        background: var(--trang);
+        border: 1px solid var(--duong-ke);
+        border-radius: 14px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, .04);
+        overflow: hidden;
+        transition: all .2s;
+    }
+
+    .card:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+        transform: translateY(-2px);
+    }
+
+    .card-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--duong-ke);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--nen);
+    }
+
+    .card-icon {
+        font-size: 20px
+    }
+
+    .card-header h3 {
+        font-size: 15px;
+        font-weight: 900;
+        color: var(--chu)
+    }
+
+    .card-body {
+        padding: 20px
+    }
+
+    /* ========================
+   SCORE CIRCLE
+   ======================== */
+    .score-circle {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 20px;
+    }
+
+    .donut-chart {
+        width: 100%;
+        height: 100%
+    }
+
+    .score-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .score-value {
+        font-size: 48px;
+        font-weight: 1000;
+        color: var(--cam);
+        line-height: 1
+    }
+
+    .score-label {
+        font-size: 18px;
+        color: var(--chu-phu);
+        font-weight: 800
+    }
+
+    .tier-badge {
+        text-align: center;
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 1000;
+        margin-bottom: 12px;
+    }
+
+    .tier-badge.tier-ready {
+        background: var(--tot-nen);
+        color: var(--tot)
+    }
+
+    .tier-badge.tier-near {
+        background: var(--xanh-nen);
+        color: var(--xanh)
+    }
+
+    .tier-badge.tier-partial {
+        background: var(--canh-bao-nen);
+        color: var(--canh-bao)
+    }
+
+    .tier-badge.tier-not-ready {
+        background: var(--nguy-hiem-nen);
+        color: var(--nguy-hiem)
+    }
+
+    .tier-note {
+        text-align: center;
+        font-size: 13px;
+        color: var(--chu-phu);
+        line-height: 1.5;
+        font-weight: 700
+    }
+
+    /* ========================
+   GATE STATUS
+   ======================== */
+    .gate-status {
+        text-align: center
+    }
+
+    .gate-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 1000;
+        margin-bottom: 12px;
+    }
+
+    .gate-badge.pass {
+        background: var(--tot-nen);
+        color: var(--tot)
+    }
+
+    .gate-badge.blocked {
+        background: var(--nguy-hiem-nen);
+        color: var(--nguy-hiem)
+    }
+
+    .gate-badge.pending {
+        background: var(--canh-bao-nen);
+        color: var(--canh-bao)
+    }
+
+    .gate-description {
+        font-size: 13px;
+        color: var(--chu-phu);
+        line-height: 1.5;
+        font-weight: 700
+    }
+
+    /* ========================
+   INFO LIST
+   ======================== */
+    .info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--duong-ke);
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0
+    }
+
+    .info-label {
+        font-size: 13px;
+        color: var(--chu-phu);
+        font-weight: 800
+    }
+
+    .info-value {
+        font-size: 13px;
+        color: var(--chu);
+        font-weight: 900;
+        text-align: right
+    }
+
+    .mono {
+        font-family: ui-monospace, monospace
+    }
+
+    /* ========================
+   EXPORT BUTTON
+   ======================== */
+    .btn-export {
+        width: 100%;
+        padding: 14px 20px;
+        background: var(--cam);
+        color: var(--trang);
+        border: none;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 900;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all .2s;
+    }
+
+    .btn-export:hover {
+        background: #d73211;
+        box-shadow: 0 6px 18px rgba(238, 77, 45, .22);
+        transform: translateY(-2px);
+    }
+
+    /* ========================
+   ALERT
+   ======================== */
+    .alert {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px;
+        border-radius: 14px;
+        margin-bottom: 24px;
+        border: 1px solid;
+    }
+
+    .alert-danger {
+        background: var(--nguy-hiem-nen);
+        border-color: #fecaca
+    }
+
+    .alert-icon {
+        font-size: 28px;
+        flex-shrink: 0
+    }
+
+    .alert-content h4 {
+        font-size: 16px;
+        font-weight: 1000;
+        color: var(--nguy-hiem);
+        margin-bottom: 8px
+    }
+
+    .alert-content p {
+        font-size: 14px;
+        color: var(--chu);
+        line-height: 1.6;
+        font-weight: 700
+    }
+
+    /* ========================
+   CHART CONTAINERS
+   ======================== */
+    .group-chart {
+        min-height: 280px;
+        padding: 20px 0
+    }
+
+    .trend-chart {
+        min-height: 240px;
+        padding: 20px
+    }
+
+    .trend-empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--chu-phu)
+    }
+
+    .trend-empty-icon {
+        font-size: 48px;
+        margin-bottom: 16px
+    }
+
+    .trend-empty h4 {
+        font-size: 16px;
+        font-weight: 900;
+        margin-bottom: 8px;
+        color: var(--chu)
+    }
+
+    .trend-empty p {
+        font-size: 14px;
+        font-weight: 700
+    }
+
+    /* ========================
+   FIXLIST
+   ======================== */
+    .fixlist {
+        display: flex;
+        flex-direction: column;
+        gap: 12px
+    }
+
+    .fixlist-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 16px;
+        border: 1px solid var(--duong-ke);
+        border-radius: 12px;
+        background: var(--trang);
+        transition: all .2s;
+    }
+
+    .fixlist-item:hover {
+        border-color: var(--cam);
+        box-shadow: 0 6px 18px rgba(238, 77, 45, .12);
+        transform: translateY(-1px);
+    }
+
+    .fixlist-priority {
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 1000;
+        flex-shrink: 0;
+    }
+
+    .fixlist-priority.p0 {
+        background: var(--nguy-hiem-nen);
+        color: var(--nguy-hiem)
+    }
+
+    .fixlist-priority.p1 {
+        background: var(--canh-bao-nen);
+        color: var(--canh-bao)
+    }
+
+    .fixlist-priority.p2 {
+        background: var(--xanh-nen);
+        color: var(--xanh)
+    }
+
+    .fixlist-content {
+        flex: 1
+    }
+
+    .fixlist-title {
+        font-size: 14px;
+        font-weight: 900;
+        color: var(--chu);
+        margin-bottom: 6px
+    }
+
+    .fixlist-desc {
+        font-size: 13px;
+        color: var(--chu-phu);
+        line-height: 1.5;
+        font-weight: 700
+    }
+
+    .fixlist-impact {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--chu-phu);
+        font-weight: 700
+    }
+
+    /* ========================
+   TABLE TOOLBAR
+   ======================== */
+    .table-toolbar {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 240px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border: 1px solid var(--duong-ke);
+        border-radius: 10px;
+        background: var(--trang);
+    }
+
+    .search-icon {
+        font-size: 16px;
+        color: var(--chu-phu)
+    }
+
+    .search-box input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 14px;
+        color: var(--chu);
+        font-weight: 700;
+    }
+
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 10px
+    }
+
+    .filter-group label {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--chu)
+    }
+
+    .filter-group select {
+        padding: 10px 16px;
+        border: 1px solid var(--duong-ke);
+        border-radius: 10px;
+        font-size: 14px;
+        color: var(--chu);
+        background: var(--trang);
+        cursor: pointer;
+        font-weight: 800;
+    }
+
+    /* ========================
+   TABLE
+   ======================== */
+    .table-container {
+        overflow-x: auto;
+        border: 1px solid var(--duong-ke);
+        border-radius: 12px;
+        background: var(--trang);
+    }
+
+    .kpi-table {
+        width: 100%;
+        border-collapse: collapse
+    }
+
+    .kpi-table thead {
+        background: var(--nen);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .kpi-table th {
+        padding: 14px 16px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 900;
+        color: var(--chu);
+        border-bottom: 2px solid var(--duong-ke);
+    }
+
+    .kpi-table th.sortable {
+        cursor: pointer;
+        user-select: none
+    }
+
+    .kpi-table th.sortable:hover {
+        background: #f3f4f6
+    }
+
+    .sort-icon {
+        margin-left: 4px;
+        opacity: .5
+    }
+
+    .kpi-table tbody tr {
+        border-bottom: 1px solid var(--duong-ke);
+        cursor: pointer;
+        transition: all .2s;
+    }
+
+    .kpi-table tbody tr:hover {
+        background: var(--cam-nhat)
+    }
+
+    .kpi-table td {
+        padding: 14px 16px;
+        font-size: 14px;
+        color: var(--chu);
+        font-weight: 700
+    }
+
+    .kpi-id {
+        font-family: ui-monospace, monospace;
+        font-weight: 900;
+        color: var(--cam);
+    }
+
+    .kpi-name {
+        font-weight: 900
+    }
+
+    .kpi-score {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 1000;
+    }
+
+    .kpi-score.score-100 {
+        background: var(--tot-nen);
+        color: var(--tot)
+    }
+
+    .kpi-score.score-50 {
+        background: var(--canh-bao-nen);
+        color: var(--canh-bao)
+    }
+
+    .kpi-score.score-0 {
+        background: var(--nguy-hiem-nen);
+        color: var(--nguy-hiem)
+    }
+
+    .impact-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px
+    }
+
+    .impact-bar-bg {
+        flex: 1;
+        height: 8px;
+        background: var(--duong-ke);
+        border-radius: 999px;
+        overflow: hidden;
+    }
+
+    .impact-bar-fill {
+        height: 100%;
+        background: var(--cam);
+        border-radius: 999px;
+        transition: width .3s;
+    }
+
+    .impact-value {
+        font-size: 12px;
+        font-weight: 900;
+        color: var(--chu-phu);
+        min-width: 62px;
+        text-align: right;
+    }
+
+    /* Mobile KPI cards */
+    .kpi-cards {
+        display: none
+    }
+
+    /* ========================
+   INSIGHT GRID (Top cards)
+   ======================== */
+    .insight-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .insight-card {
+        background: var(--trang);
+        border: 1px solid var(--duong-ke);
+        border-radius: 14px;
+        padding: 14px 16px;
+        box-shadow: 0 2px 10px rgba(17, 24, 39, .06);
+    }
+
+    .insight-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .insight-title {
+        font-weight: 1000;
+        font-size: 14px;
+        color: var(--chu)
+    }
+
+    .insight-sub {
+        font-size: 12px;
+        color: var(--chu-phu);
+        font-weight: 700
+    }
+
+    .insight-body {
+        display: grid;
+        gap: 8px
+    }
+
+    .insight-skeleton {
+        height: 48px;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #f3f4f6, #fafafa, #f3f4f6);
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: 200% 0
+        }
+
+        100% {
+            background-position: -200% 0
+        }
+    }
+
+    /* ========================
+   KPI PILL + BADGE
+   ======================== */
+    .kpi-pill {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--duong-ke);
+        border-radius: 12px;
+        background: #fff;
+        cursor: pointer;
+        transition: all .15s;
+    }
+
+    .kpi-pill:hover {
+        border-color: var(--cam);
+        box-shadow: 0 6px 18px rgba(238, 77, 45, .12);
+        transform: translateY(-1px);
+    }
+
+    .kpi-pill-left {
+        display: flex;
+        flex-direction: column;
+        gap: 2px
+    }
+
+    .kpi-pill-id {
+        font-weight: 1000;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        color: var(--chu);
+    }
+
+    .kpi-pill-meta {
+        font-size: 12px;
+        color: var(--chu-phu);
+        font-weight: 700
+    }
+
+    .kpi-pill-right {
+        text-align: right
+    }
+
+    .kpi-pill-impact {
+        font-weight: 1000;
+        font-size: 12px;
+        color: var(--chu)
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 1000;
+        border: 1px solid var(--duong-ke);
+        background: var(--trang);
+        white-space: nowrap;
+    }
+
+    .badge.p0 {
+        background: var(--nguy-hiem-nen);
+        border-color: rgba(220, 38, 38, .25);
+        color: var(--nguy-hiem)
+    }
+
+    .badge.p1 {
+        background: var(--canh-bao-nen);
+        border-color: rgba(245, 158, 11, .25);
+        color: var(--canh-bao)
+    }
+
+    .badge.p2 {
+        background: var(--xanh-nen);
+        border-color: rgba(37, 99, 235, .25);
+        color: var(--xanh)
+    }
+
+    .badge.gate {
+        font-weight: 1100
+    }
+
+    /* ========================
+   BUTTON: View Recommendation
+   ======================== */
+    .btn-rec {
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid var(--duong-ke);
+        background: var(--trang);
+        cursor: pointer;
+        font-weight: 900;
+        font-size: 12px;
+        transition: all .15s;
+        white-space: nowrap;
+    }
+
+    .btn-rec:hover {
+        border-color: var(--cam);
+        box-shadow: 0 4px 14px rgba(238, 77, 45, .12);
+        transform: translateY(-1px);
+    }
+
+    /* ========================
+   MODAL (BASE)
+   ======================== */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+    }
+
+    .modal.active {
+        display: block
+    }
+
+    .modal-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, .55);
+    }
+
+    .modal-panel {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(180deg, #fff, #fbfbfd);
+        border-radius: 18px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
+        max-width: 720px;
+        width: 90%;
+        max-height: 82vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(229, 231, 235, .9);
+    }
+
+    .modal-header {
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--duong-ke);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: rgba(255, 255, 255, .92);
+        backdrop-filter: blur(10px);
+    }
+
+    .modal-header h3 {
+        font-size: 18px;
+        font-weight: 1000;
+        color: var(--chu)
+    }
+
+    .modal-close {
+        width: 34px;
+        height: 34px;
+        border: none;
+        background: var(--nen);
+        border-radius: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all .2s;
+    }
+
+    .modal-close:hover {
+        background: var(--duong-ke)
+    }
+
+    .modal-body {
+        padding: 20px 22px;
+        overflow-y: auto;
+    }
+
+    /* ========================
+   RECOMMENDATION MODAL (SCAN UI)
+   Works with your JS output:
+   .rec-head .rec-kpi .rec-meta
+   .chip good/warn/bad
+   .rec-block .rec-block-title .rec-lines .rec-line .rec-k .rec-v
+   .rec-list .rec-item .rec-item-title .rec-item-sub .rec-badges
+   .rec-kpi-grid .kpi-snap .k/.v
+   ======================== */
+    .rec-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .rec-kpi {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 1100;
+        font-size: 18px;
+        color: var(--chu);
+    }
+
+    .rec-meta {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+        color: var(--chu-phu);
+        font-weight: 900;
+    }
+
+    /* chips */
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--duong-ke);
+        background: #fff;
+        font-size: 12px;
+        font-weight: 1000;
+        line-height: 1;
+        box-shadow: 0 8px 20px rgba(17, 24, 39, .06);
+    }
+
+    .chip::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: var(--chu-phu);
+        opacity: .85;
+    }
+
+    .chip.good {
+        background: var(--tot-nen);
+        color: var(--tot);
+        border-color: rgba(22, 163, 74, .25)
+    }
+
+    .chip.good::before {
+        background: var(--tot)
+    }
+
+    .chip.warn {
+        background: var(--canh-bao-nen);
+        color: var(--canh-bao);
+        border-color: rgba(245, 158, 11, .28)
+    }
+
+    .chip.warn::before {
+        background: var(--canh-bao)
+    }
+
+    .chip.bad {
+        background: var(--nguy-hiem-nen);
+        color: var(--nguy-hiem);
+        border-color: rgba(220, 38, 38, .25)
+    }
+
+    .chip.bad::before {
+        background: var(--nguy-hiem)
+    }
+
+    /* snapshot 2x2 */
+    .rec-kpi-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 14px;
+    }
+
+    .kpi-snap {
+        border: 1px solid var(--duong-ke);
+        background: #fff;
+        border-radius: 14px;
+        padding: 12px;
+        box-shadow: 0 10px 24px rgba(17, 24, 39, .06);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .kpi-snap::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(238, 77, 45, .10), transparent 60%);
+        opacity: .9;
+        pointer-events: none;
+    }
+
+    .kpi-snap .k {
+        position: relative;
+        font-size: 11px;
+        color: var(--chu-phu);
+        font-weight: 1100;
+        letter-spacing: .08em;
+    }
+
+    .kpi-snap .v {
+        position: relative;
+        margin-top: 6px;
+        font-size: 14px;
+        font-weight: 1000;
+        color: var(--chu);
+        line-height: 1.35;
+    }
+
+    /* blocks */
+    .rec-block {
+        margin-top: 14px;
+        border: 1px solid var(--duong-ke);
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 12px 28px rgba(17, 24, 39, .06);
+        overflow: hidden;
+    }
+
+    .rec-block-title {
+        padding: 12px 14px;
+        font-weight: 1100;
+        letter-spacing: .06em;
+        font-size: 12px;
+        color: var(--chu);
+        background: linear-gradient(90deg, rgba(238, 77, 45, .12), rgba(238, 77, 45, .02));
+        border-bottom: 1px solid var(--duong-ke);
+    }
+
+    .rec-lines {
+        padding: 12px 14px
+    }
+
+    .rec-line {
+        display: flex;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px dashed rgba(17, 24, 39, .10);
+    }
+
+    .rec-line:last-child {
+        border-bottom: 0
+    }
+
+    .rec-k {
+        min-width: 92px;
+        color: var(--chu-phu);
+        font-weight: 1100;
+        font-size: 12px;
+    }
+
+    .rec-v {
+        color: var(--chu);
+        font-weight: 900;
+        font-size: 13px
+    }
+
+    /* list items */
+    .rec-list {
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px
+    }
+
+    .rec-item {
+        border: 1px solid rgba(17, 24, 39, .10);
+        border-radius: 14px;
+        padding: 12px;
+        background: linear-gradient(180deg, #fff, #fcfcfd);
+        transition: all .15s ease;
+    }
+
+    .rec-item:hover {
+        border-color: rgba(238, 77, 45, .35);
+        box-shadow: 0 10px 24px rgba(238, 77, 45, .10);
+        transform: translateY(-1px);
+    }
+
+    .rec-item-title {
+        font-weight: 1100;
+        font-size: 14px;
+        color: var(--chu)
+    }
+
+    .rec-item-sub {
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--chu-phu);
+        font-weight: 800;
+        line-height: 1.45
+    }
+
+    .rec-badges {
+        margin-top: 10px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap
+    }
+
+    /* bottom CTA (if you render it) */
+    .rec-cta {
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        background: rgba(255, 255, 255, .92);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--duong-ke);
+        padding: 12px 14px;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .btn-mini {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--duong-ke);
+        background: #fff;
+        font-weight: 1000;
+        font-size: 13px;
+        cursor: pointer;
+        box-shadow: 0 10px 24px rgba(17, 24, 39, .06);
+        transition: all .15s;
+    }
+
+    .btn-mini:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 30px rgba(17, 24, 39, .10)
+    }
+
+    .btn-mini.primary {
+        background: var(--cam);
+        border-color: var(--cam);
+        color: #fff
+    }
+
+    /* Old fallback recommendation boxes (if still used somewhere) */
+    .recommendation-box {
+        padding: 16px;
+        background: var(--xanh-nen);
+        border-left: 4px solid var(--xanh);
+        border-radius: 10px;
+        margin-bottom: 16px;
+    }
+
+    .recommendation-box h5 {
+        font-size: 14px;
+        font-weight: 1000;
+        color: var(--xanh);
+        margin-bottom: 10px;
+    }
+
+    .recommendation-box ul {
+        list-style: none;
+        padding: 0;
+        margin: 0
+    }
+
+    .recommendation-box li {
+        font-size: 13px;
+        color: var(--chu);
+        line-height: 1.6;
+        padding-left: 20px;
+        position: relative;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+
+    .recommendation-box li::before {
+        content: "•";
+        position: absolute;
+        left: 8px;
+        color: var(--xanh);
+        font-weight: 1000;
+    }
+
+    /* ========================
+   PRIORITY MAP
+   ======================== */
+    .priority-map-wrap {
+        display: grid;
+        grid-template-columns: 1fr 220px;
+        gap: 16px;
+        align-items: start;
+    }
+
+    .priority-map {
+        border: 1px solid var(--duong-ke);
+        background: #fff;
+        border-radius: 14px;
+        overflow: hidden;
+        min-height: 260px;
+    }
+
+    .priority-legend {
+        border: 1px solid var(--duong-ke);
+        background: #fff;
+        border-radius: 14px;
+        padding: 12px;
+        display: grid;
+        gap: 10px;
+        color: var(--chu);
+    }
+
+    .legend-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        font-weight: 900
+    }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        display: inline-block
+    }
+
+    .legend-dot.p0 {
+        background: var(--nguy-hiem)
+    }
+
+    .legend-dot.p1 {
+        background: var(--canh-bao)
+    }
+
+    .legend-dot.p2 {
+        background: var(--xanh)
+    }
+
+    .legend-note {
+        font-size: 12px;
+        color: var(--chu-phu);
+        font-weight: 700
+    }
+
+    /* ========================
+   GROUP CHART (gc-*)
+   Fix “đè chữ trục Y” bằng gutter trái
+   ======================== */
+    .gc-wrap {
+        display: grid;
+        gap: 12px
+    }
+
+    .gc-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .gc-title {
+        display: flex;
+        align-items: center;
+        gap: 12px
+    }
+
+    .gc-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--duong-ke);
+        background: #fff;
+    }
+
+    .gc-h {
+        font-size: 14px;
+        font-weight: 1100;
+        color: var(--chu)
+    }
+
+    .gc-sub {
+        font-size: 12px;
+        font-weight: 900;
+        color: var(--chu-phu)
+    }
+
+    .gc-chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center
+    }
+
+    .gc-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--duong-ke);
+        background: #fff;
+        font-size: 12px;
+        font-weight: 900;
+        color: var(--chu);
+        box-shadow: 0 2px 10px rgba(17, 24, 39, .04);
+    }
+
+    .gc-chip .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--cam)
+    }
+
+    .gc-chip .muted {
+        opacity: .65;
+        font-weight: 900
+    }
+
+    .gc-chip.weak {
+        background: var(--nguy-hiem-nen);
+        border-color: rgba(220, 38, 38, .25)
+    }
+
+    .gc-chip.weak .dot {
+        background: var(--nguy-hiem)
+    }
+
+    .gc-area {
+        position: relative;
+        border: 1px solid var(--duong-ke);
+        border-radius: 14px;
+        background: linear-gradient(180deg, #ffffff, #fbfbfd);
+        box-shadow: 0 6px 22px rgba(17, 24, 39, .06);
+        padding: 14px 14px 10px;
+        min-height: 260px;
+        overflow: hidden;
+
+        /* gutter trái cho label Y */
+        --y-gutter: 58px;
+    }
+
+    .gc-grid {
+        position: absolute;
+        inset: 14px 14px 58px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        pointer-events: none;
+        z-index: 0;
+
+        left: calc(14px + var(--y-gutter));
+    }
+
+    .gc-gridline {
+        position: relative;
+        border-top: 1px solid rgba(229, 231, 235, .9)
+    }
+
+    .gc-gridline::before {
+        content: attr(data-tick) "%";
+        position: absolute;
+        left: calc(-1 * var(--y-gutter));
+        top: -10px;
+        width: calc(var(--y-gutter) - 10px);
+        text-align: right;
+        padding-right: 6px;
+        font-size: 12px;
+        font-weight: 1100;
+        color: rgba(107, 114, 128, .95);
+        background: rgba(255, 255, 255, .78);
+        border-radius: 8px;
+    }
+
+    .gc-bars {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        align-items: end;
+        padding: 10px 10px 0;
+        height: 220px;
+
+        padding-left: calc(10px + var(--y-gutter));
+    }
+
+    .gc-col {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center
+    }
+
+    .gc-track {
+        width: 100%;
+        height: 180px;
+        background: rgba(229, 231, 235, .75);
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        padding: 6px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8);
+    }
+
+    .gc-fill {
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+        height: var(--h);
+        max-height: calc(100% - 12px);
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(238, 77, 45, .98), rgba(238, 77, 45, .22));
+        border: 1px solid rgba(17, 24, 39, .06);
+        transform-origin: bottom;
+        animation: gcGrow .65s ease forwards;
+        cursor: pointer;
+        transition: transform .15s ease, filter .15s ease;
+        z-index: 3;
+    }
+
+    .gc-fill:hover {
+        transform: translateY(-2px);
+        filter: drop-shadow(0 10px 14px rgba(238, 77, 45, .18));
+    }
+
+    .gc-fill.weak {
+        background: linear-gradient(180deg, rgba(220, 38, 38, .98), rgba(220, 38, 38, .18));
+    }
+
+    .gc-fill.weak:hover {
+        filter: drop-shadow(0 10px 14px rgba(220, 38, 38, .22))
+    }
+
+    @keyframes gcGrow {
+        from {
+            transform: scaleY(.25);
+            opacity: .6
+        }
+
+        to {
+            transform: scaleY(1);
+            opacity: 1
+        }
+    }
+
+    .gc-value {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        font-weight: 1100;
+        color: var(--cam);
+        white-space: nowrap;
+        z-index: 6;
+        pointer-events: none;
+    }
+
+    .gc-fill.weak .gc-value {
+        color: var(--nguy-hiem)
+    }
+
+    .gc-x {
+        text-align: center
+    }
+
+    .gc-x-name {
+        font-size: 13px;
+        font-weight: 1100;
+        color: var(--chu)
+    }
+
+    .gc-x-sub {
+        font-size: 12px;
+        font-weight: 1000;
+        color: var(--chu-phu)
+    }
+
+    .gc-legend {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 0 6px;
+        color: var(--chu-phu);
+        font-weight: 900;
+        font-size: 12px;
+    }
+
+    .gc-tooltip {
+        position: absolute;
+        pointer-events: none;
+        background: rgba(17, 24, 39, .92);
+        color: #fff;
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 1000;
+        line-height: 1.35;
+        box-shadow: 0 14px 30px rgba(0, 0, 0, .25);
+        transform: translate(-50%, -110%);
+        opacity: 0;
+        transition: opacity .12s ease, transform .12s ease;
+        white-space: nowrap;
+        z-index: 50;
+    }
+
+    .gc-tooltip.show {
+        opacity: 1;
+        transform: translate(-50%, -125%)
+    }
+
+    .gc-tooltip .muted {
+        opacity: .85;
+        font-weight: 900
+    }
+
+    /* ========================
+   RESPONSIVE
+   ======================== */
+    @media (max-width:1024px) {
+        .dashboard-container {
+            grid-template-columns: 1fr
+        }
+
+        .sidebar {
+            position: relative;
+            top: 0
+        }
+
+        .header-container {
+            flex-direction: column;
+            align-items: flex-start
+        }
+
+        .header-right {
+            width: 100%
+        }
+
+        .btn-header {
+            flex: 1
+        }
+
+        .insight-grid {
+            grid-template-columns: 1fr
+        }
+
+        .priority-map-wrap {
+            grid-template-columns: 1fr
+        }
+    }
+
+    @media (max-width:900px) {
+        .gc-bars {
+            grid-template-columns: 1fr;
+            height: auto;
+            padding-left: calc(10px + 42px)
+        }
+
+        .gc-area {
+            --y-gutter: 42px;
+        }
+
+        .gc-track {
+            height: 140px
+        }
+    }
+
+    @media (max-width:640px) {
+        .dashboard-container {
+            padding: 16px
+        }
+
+        .header-container {
+            padding: 16px 20px
+        }
+
+        .progress-bar-container {
+            padding: 12px 20px
+        }
+
+        .progress-step span {
+            display: none
+        }
+
+        .table-container {
+            display: none
+        }
+
+        .kpi-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .kpi-card {
+            padding: 16px;
+            border: 1px solid var(--duong-ke);
+            border-radius: 12px;
+            background: var(--trang);
+        }
+
+        .kpi-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .kpi-card-body {
+            font-size: 13px;
+            color: var(--chu-phu);
+            font-weight: 700
+        }
+
+        .modal-panel {
+            width: 96%;
+            max-height: 90vh
+        }
+
+        .rec-kpi-grid {
+            grid-template-columns: 1fr
+        }
+    }
+</style>
+
+<body>
+    <!-- Header cố định -->
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="header-left">
+                <div class="logo">SMROS</div>
+                <h1 class="header-title">Dashboard – Mall Readiness</h1>
+            </div>
+            <div class="header-right">
+                <button class="btn-header" id="btnBackToResult">← Quay lại Kết quả</button>
+                <button class="btn-header btn-primary" id="btnBackToKPI">Về trang Chấm điểm KPI</button>
+            </div>
+        </div>
+
+        <!-- Progress indicator -->
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress-step completed">
+                    <div class="step-dot">✓</div>
+                    <span>Nhập dữ liệu</span>
+                </div>
+                <div class="progress-line completed"></div>
+                <div class="progress-step completed">
+                    <div class="step-dot">✓</div>
+                    <span>Chấm điểm</span>
+                </div>
+                <div class="progress-line active"></div>
+                <div class="progress-step active">
+                    <div class="step-dot">3</div>
+                    <span>Dashboard</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Tổng quan điểm -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📊</span>
+                    <h3>Tổng quan điểm</h3>
+                </div>
+                <div class="card-body">
+                    <div id="scoreCircle" class="score-circle">
+                        <svg viewBox="0 0 200 200" class="donut-chart">
+                            <circle cx="100" cy="100" r="85" fill="none" stroke="var(--duong-ke)" stroke-width="20" />
+                            <circle id="scoreArc" cx="100" cy="100" r="85" fill="none" stroke="var(--cam)"
+                                stroke-width="20" stroke-linecap="round" transform="rotate(-90 100 100)"
+                                stroke-dasharray="534" stroke-dashoffset="534" />
+                        </svg>
+                        <div class="score-content">
+                            <div class="score-value" id="totalScoreDisplay">--</div>
+                            <div class="score-label">/ 100</div>
+                        </div>
+                    </div>
+                    <div class="tier-badge" id="tierBadge">--</div>
+                    <div class="tier-note" id="tierNote">--</div>
+                </div>
+            </div>
+
+            <!-- Trạng thái Gate -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🔐</span>
+                    <h3>Trạng thái Gate</h3>
+                </div>
+                <div class="card-body">
+                    <div id="gateStatus" class="gate-status">
+                        <div class="gate-badge">--</div>
+                        <p class="gate-description">--</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thông tin đánh giá -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">ℹ️</span>
+                    <h3>Thông tin đánh giá</h3>
+                </div>
+                <div class="card-body">
+                    <div class="info-list">
+                        <div class="info-item">
+                            <span class="info-label">Cửa hàng:</span>
+                            <span class="info-value" id="shopName">--</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Shop ID:</span>
+                            <span class="info-value mono" id="shopId">--</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Thời điểm:</span>
+                            <span class="info-value mono" id="computedAt">--</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Assessment ID:</span>
+                            <span class="info-value mono" id="assessmentId">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút xuất kết quả -->
+            <button class="btn-export" id="btnExportJSON">
+                <span>⬇️</span>
+                <span>Xuất kết quả (JSON)</span>
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Cảnh báo Gate (nếu bị chặn) -->
+            <div id="gateWarning" class="alert alert-danger" style="display: none;">
+                <div class="alert-icon">⛔</div>
+                <div class="alert-content">
+                    <h4>Bị chặn bởi điều kiện</h4>
+                    <p id="gateWarningText">--</p>
+                </div>
+            </div>
+
+            <!-- Insight Cards (BI-style quick read) -->
+            <section class="insight-grid" aria-label="Insight snapshot">
+                <div class="insight-card" id="insightTopDrag">
+                    <div class="insight-head">
+                        <div class="insight-title">🚨 Top KPI kéo tụt readiness</div>
+                        <div class="insight-sub">Top 3 theo ImpactGap</div>
+                    </div>
+                    <div class="insight-body" id="insightTopDragBody">
+                        <div class="insight-skeleton">Đang tải…</div>
+                    </div>
+                </div>
+
+                <div class="insight-card" id="insightGateRisk">
+                    <div class="insight-head">
+                        <div class="insight-title">⚠️ Gate Risk</div>
+                        <div class="insight-sub">Trạng thái điều kiện</div>
+                    </div>
+                    <div class="insight-body" id="insightGateRiskBody">
+                        <div class="insight-skeleton">Đang tải…</div>
+                    </div>
+                </div>
+                <div class="insight-card" id="insightCoverage">
+                    <div class="insight-head">
+                        <div class="insight-title">🧾 KPI Coverage</div>
+                        <div class="insight-sub">Độ đầy đủ dữ liệu</div>
+                    </div>
+                    <div class="insight-body" id="insightCoverageBody">
+                        <div class="insight-skeleton">Đang tải…</div>
+                    </div>
+                </div>
+
+                <div class="insight-card" id="insightWeakestGroup">
+                    <div class="insight-head">
+                        <div class="insight-title">📉 Nhóm yếu nhất</div>
+                        <div class="insight-sub">So sánh điểm 4 nhóm</div>
+                    </div>
+                    <div class="insight-body" id="insightWeakestGroupBody">
+                        <div class="insight-skeleton">Đang tải…</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Điểm theo nhóm -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📈</span>
+                    <h3>Điểm theo 4 nhóm tiêu chí</h3>
+                </div>
+                <div class="card-body">
+                    <div id="groupChart" class="group-chart">
+                        <!-- SVG bars sẽ được tạo bởi JS -->
+                    </div>
+                </div>
+            </div>
+            <!-- Pareto ImpactGap -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📌</span>
+                    <h3>Pareto – Top KPI kéo tụt Readiness</h3>
+                </div>
+                <div class="card-body">
+                    <div id="paretoChart" class="trend-chart"><!-- SVG will be injected --></div>
+                </div>
+            </div>
+
+            <!-- Score Distribution -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🧮</span>
+                    <h3>Phân bố điểm KPI (0/50/100)</h3>
+                </div>
+                <div class="card-body">
+                    <div id="distChart" class="trend-chart"><!-- SVG will be injected --></div>
+                </div>
+            </div>
+            <!-- Priority Map: Impact x Effort -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🗺️</span>
+                    <h3>Priority Map (Impact × Effort)</h3>
+                </div>
+                <div class="card-body">
+                    <div class="priority-map-wrap">
+                        <div class="priority-map" id="priorityMap" aria-label="Priority map scatter">
+                            <!-- SVG scatter sẽ được tạo bởi JS -->
+                        </div>
+                        <div class="priority-legend">
+                            <div class="legend-row"><span class="legend-dot p0"></span> P0 – Gate</div>
+                            <div class="legend-row"><span class="legend-dot p1"></span> P1 – Top 20% ImpactGap</div>
+                            <div class="legend-row"><span class="legend-dot p2"></span> P2 – Others</div>
+                            <div class="legend-note">Click dot để xem Recommendation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Xu hướng điểm -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📉</span>
+                    <h3>Xu hướng điểm qua các lần đánh giá</h3>
+                </div>
+                <div class="card-body">
+                    <div id="trendChart" class="trend-chart">
+                        <!-- SVG line chart hoặc empty state -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danh sách ưu tiên khắc phục -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🛠️</span>
+                    <h3>Danh sách ưu tiên khắc phục (Fixlist)</h3>
+                </div>
+                <div class="card-body">
+                    <div id="fixlist" class="fixlist">
+                        <!-- Danh sách fixlist -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bảng KPI chi tiết -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📋</span>
+                    <h3>Bảng KPI chi tiết</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Toolbar -->
+                    <div class="table-toolbar">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="searchKPI" placeholder="Tìm kiếm theo mã hoặc tên KPI...">
+                        </div>
+                        <div class="filter-group">
+                            <label>Nhóm:</label>
+                            <select id="filterGroup">
+                                <option value="">Tất cả</option>
+                                <option value="Vận hành">Vận hành</option>
+                                <option value="Thương hiệu">Thương hiệu</option>
+                                <option value="Danh mục">Danh mục</option>
+                                <option value="Quy mô">Quy mô</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-container">
+                        <table class="kpi-table" id="kpiTable">
+                            <thead>
+                                <tr>
+                                    <th>Mã KPI</th>
+                                    <th>Tên chỉ số</th>
+                                    <th>Nhóm</th>
+                                    <th>Điểm</th>
+                                    <th class="sortable" data-sort="impact">
+                                        Mức ảnh hưởng
+                                        <span class="sort-icon">⇅</span>
+                                    </th>
+                                    <th>Recommendation</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kpiTableBody">
+                                <!-- Rows sẽ được tạo bởi JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Mobile card list (ẩn trên desktop) -->
+                    <div class="kpi-cards" id="kpiCards">
+                        <!-- Cards sẽ được tạo bởi JS cho mobile -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal chi tiết KPI -->
+    <div id="kpiModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-panel">
+            <div class="modal-header">
+                <h3 id="modalTitle">Chi tiết KPI</h3>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Nội dung chi tiết KPI -->
+            </div>
+        </div>
+    </div>
+
+    <script src="recommendation.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
